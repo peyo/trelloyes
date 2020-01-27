@@ -1,32 +1,68 @@
-import React, { Component } from 'react';
-import './App.css';
-import List from './List'
+import React, { Component } from "react";
+import "./App.css";
+import List from "./List";
+import STORE from "./STORE";
 
 class App extends Component {
-  static defaultProps = {
-    // this is where the STORE is broken down into lists and allCards
-    store: {
-      lists: [],
-      allCards: {},
-    }
+  state = {
+    store: STORE
   };
-  
-  render () {
-    // this.props is declared as store here. This makes it easier to write below.
-    const { store } = this.props
+
+  handleDeleteCard(listIndex, cardId) {
+    const oldCardIds = this.state.store.lists[listIndex].cardIds;
+    console.log(oldCardIds);
+
+    // get key of card from ID of card, which is a value
+    function getKeyByValue(object, value) {
+      return Object.keys(object).find(key => object[key] === value);
+    }
+    const map = this.state.store.lists[listIndex].cardIds;
+    const cardKey = getKeyByValue(map, cardId);
+
+    // use key of card from above function
+    function omit(obj, keyToOmit) {
+      return Object.entries(obj).reduce(
+        (newObj, [key, value]) =>
+          key === keyToOmit ? newObj : { ...newObj, [key]: value },
+        {}
+      );
+    }
+
+    const newCardIdsA = omit(oldCardIds, cardKey);
+    const newCardIdsB = Object.values(newCardIdsA);
+    console.log(newCardIdsB)
+
+    // const newLists = this.state.store.lists.map(list => {
+    //   if (list.cardIds !== newCardIdsB) {
+    //     return newCardIdsB
+    //   } else {
+    //     return list.cardIds
+    //   }
+    // })
+
+    // this.setState({
+    //   store: {
+    //     lists: []
+    //     allCards: {}
+    //   }
+    // })
+  }
+
+  render() {
     return (
-      <main className='App'>
-        <header className='App-header'>
+      <main className="App">
+        <header className="App-header">
           <h1>Trelloyes!</h1>
         </header>
-        <div className='App-list'>
-          {store.lists.map(list => (
-            <List 
+        <div className="App-list">
+          {this.state.store.lists.map((list, index) => (
+            <List
               key={list.id}
+              id={list.id}
+              index={index}
               header={list.header}
-              cards={list.cardIds.map(id => (
-                store.allCards[id]
-              ))}
+              cards={list.cardIds.map(id => this.state.store.allCards[id])}
+              onDeleteCard={cardId => this.handleDeleteCard(index, cardId)}
             />
           ))}
         </div>
