@@ -10,7 +10,6 @@ class App extends Component {
 
   handleDeleteCard(listIndex, cardId) {
     const oldCardIds = this.state.store.lists[listIndex].cardIds;
-    console.log(oldCardIds);
 
     // get key of card from ID of card, which is a value
     function getKeyByValue(object, value) {
@@ -30,22 +29,14 @@ class App extends Component {
 
     const newCardIdsA = omit(oldCardIds, cardKey);
     const newCardIdsB = Object.values(newCardIdsA);
-    console.log(newCardIdsB)
 
-    // const newLists = this.state.store.lists.map(list => {
-    //   if (list.cardIds !== newCardIdsB) {
-    //     return newCardIdsB
-    //   } else {
-    //     return list.cardIds
-    //   }
-    // })
-
-    // this.setState({
-    //   store: {
-    //     lists: []
-    //     allCards: {}
-    //   }
-    // })
+    this.setState({
+      store: {
+        lists: [
+          this.state.store.lists[listIndex].cardIds = newCardIdsB
+        ]
+      }
+    })
   }
 
   render() {
