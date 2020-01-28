@@ -31,6 +31,8 @@ class App extends Component {
     const newCardIdsB = Object.values(newCardIdsA);
     console.log(newCardIdsB)
 
+    // list.id === listId &&
+
     const newLists = this.state.store.lists.map(list => ({
       ...list,
       // keep ids that do not match cardId
