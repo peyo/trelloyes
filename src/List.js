@@ -23,7 +23,11 @@ class List extends Component {
               handleDeleteCard={this.props.handleDeleteCard}
             />
 					))}
-					<button type="button" className="List-add-button">
+          <button
+            type="button"
+            className="List-add-button"
+            onClick={() => this.props.handleRandomCard(this.props.id)}
+          >
 						+ Add Random Card
           </button>
 				</div>

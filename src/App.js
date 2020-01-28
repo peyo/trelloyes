@@ -5,8 +5,39 @@ import STORE from "./STORE";
 
 class App extends Component {
   state = {
-    store: STORE
+    store: STORE,
+  //  currentListId: null
   };
+
+  handleRandomCard(listId) {
+    const newRandomCard = () => {
+      const id = Math.random().toString(36).substring(2, 4)
+        + Math.random().toString(36).substring(2, 4);
+      return {
+        id,
+        title: `Random Card ${id}`,
+        content: 'lorem ipsum',
+      }
+    }
+
+    const newLists = this.state.store.lists.map(list => {
+      if (list.id === listId) {
+        return {
+          ...list,
+          // append newRandomCard to cardIds
+          cardIds: [...list.cardIds, newRandomCard.id]
+        };
+      }
+        return list;
+    })
+    console.log(newLists)
+
+    this.setState = {
+      store: {
+        lists: newLists
+      }
+    }
+  }
 
   handleDeleteCard(listId, cardId) {
     const cardList = this.state.store.lists.find(list => list.id === listId);
@@ -31,19 +62,23 @@ class App extends Component {
     const newCardIdsB = Object.values(newCardIdsA);
     console.log(newCardIdsB)
 
-    // list.id === listId &&
-
-    const newLists = this.state.store.lists.map(list => ({
-      ...list,
-      // keep ids that do not match cardId
-      cardIds: list.cardIds.filter(id => id !== cardId)
-    }))
+    const newLists = this.state.store.lists.map(list => {
+      if(list.id === listId) {
+      return {
+        ...list,
+        // keep ids that do not match cardId
+        cardIds: list.cardIds.filter(id => id !== cardId)
+      };
+    }
+    return list;
+    })
     
     this.setState({
       store: {
         ...this.state.store,
         lists: newLists
       },
+      currentListId: listId
     })
     
   }
@@ -62,7 +97,8 @@ class App extends Component {
               index={index}
               header={list.header}
               cards={list.cardIds.map(id => this.state.store.allCards[id])}
-              handleDeleteCard={cardId => this.handleDeleteCard(list.id, cardId)}
+              handleDeleteCard={(cardId) => this.handleDeleteCard(list.id, cardId)}
+              handleRandomCard={() => this.handleRandomCard(list.id)}
             />
           ))}
         </div>
