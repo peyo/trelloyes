@@ -32,15 +32,16 @@ class App extends Component {
     })
     console.log(newLists)
 
-    this.setState = {
+    this.setState({
       store: {
+        ...this.state.store,
         lists: newLists,
         allCards: {
           ...this.state.store.allCards,
           [newCard.id]: newCard
         }
       }
-    }
+    })
   }
 
   handleDeleteCard(listId, cardId) {
