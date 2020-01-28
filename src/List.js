@@ -4,7 +4,7 @@ import "./List.css";
 
 class List extends Component {
 	static defaultProps = {
-		cards: []
+    cards: [],
 	};
 
 	render() {

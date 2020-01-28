@@ -5,8 +5,7 @@ import STORE from "./STORE";
 
 class App extends Component {
   state = {
-    store: STORE,
-  //  currentListId: null
+    store: STORE
   };
 
   handleRandomCard(listId) {
@@ -20,12 +19,13 @@ class App extends Component {
       }
     }
 
+    const newCard = newRandomCard();
+
     const newLists = this.state.store.lists.map(list => {
       if (list.id === listId) {
         return {
           ...list,
-          // append newRandomCard to cardIds
-          cardIds: [...list.cardIds, newRandomCard.id]
+          cardIds: [...list.cardIds, newCard.id]
         };
       }
         return list;
@@ -34,7 +34,11 @@ class App extends Component {
 
     this.setState = {
       store: {
-        lists: newLists
+        lists: newLists,
+        allCards: {
+          ...this.state.store.allCards,
+          [newCard.id]: newCard
+        }
       }
     }
   }
@@ -43,13 +47,13 @@ class App extends Component {
     const cardList = this.state.store.lists.find(list => list.id === listId);
     const oldCardIds = cardList.cardIds
 
-    // get key of card from ID of card, which is a value
+    //***get key of card from ID of card, which is a value
     function getKeyByValue(object, value) {
       return Object.keys(object).find(key => object[key] === value);
     }
     const cardKey = getKeyByValue(oldCardIds, cardId);
 
-    // use key of card from above function
+    //***use key of card from above function
     function omit(obj, keyToOmit) {
       return Object.entries(obj).reduce(
         (newObj, [key, value]) =>
@@ -60,7 +64,7 @@ class App extends Component {
 
     const newCardIdsA = omit(oldCardIds, cardKey);
     const newCardIdsB = Object.values(newCardIdsA);
-    console.log(newCardIdsB)
+    console.log('newCardIdsB', newCardIdsB);
 
     const newLists = this.state.store.lists.map(list => {
       if(list.id === listId) {
@@ -72,15 +76,14 @@ class App extends Component {
     }
     return list;
     })
+    console.log(newLists)
     
     this.setState({
       store: {
         ...this.state.store,
         lists: newLists
       },
-      currentListId: listId
-    })
-    
+    }) 
   }
 
   render() {
