@@ -8,15 +8,15 @@ class App extends Component {
     store: STORE
   };
 
-  handleDeleteCard(listIndex, cardId) {
-    const oldCardIds = this.state.store.lists[listIndex].cardIds;
+  handleDeleteCard(listId, cardId) {
+    const cardList = this.state.store.lists.find(list => list.id === listId);
+    const oldCardIds = cardList.cardIds
 
     // get key of card from ID of card, which is a value
     function getKeyByValue(object, value) {
       return Object.keys(object).find(key => object[key] === value);
     }
-    const map = this.state.store.lists[listIndex].cardIds;
-    const cardKey = getKeyByValue(map, cardId);
+    const cardKey = getKeyByValue(oldCardIds, cardId);
 
     // use key of card from above function
     function omit(obj, keyToOmit) {
@@ -29,14 +29,21 @@ class App extends Component {
 
     const newCardIdsA = omit(oldCardIds, cardKey);
     const newCardIdsB = Object.values(newCardIdsA);
+    console.log(newCardIdsB)
 
+    const newLists = this.state.store.lists.map(list => ({
+      ...list,
+      // keep ids that do not match cardId
+      cardIds: list.cardIds.filter(id => id !== cardId)
+    }))
+    
     this.setState({
       store: {
-        lists: [
-          this.state.store.lists[listIndex].cardIds = newCardIdsB
-        ]
-      }
+        ...this.state.store,
+        lists: newLists
+      },
     })
+    
   }
 
   render() {
@@ -53,7 +60,7 @@ class App extends Component {
               index={index}
               header={list.header}
               cards={list.cardIds.map(id => this.state.store.allCards[id])}
-              onDeleteCard={cardId => this.handleDeleteCard(index, cardId)}
+              handleDeleteCard={cardId => this.handleDeleteCard(list.id, cardId)}
             />
           ))}
         </div>

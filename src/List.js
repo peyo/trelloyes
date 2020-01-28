@@ -20,13 +20,10 @@ class List extends Component {
               id={card.id}
               title={card.title}
               content={card.content}
-              onDeleteCard={this.props.onDeleteCard}
+              handleDeleteCard={this.props.handleDeleteCard}
             />
 					))}
-          <button
-            type="button"
-            className="List-add-button"
-            onClick={() => this.props.onAddRandomCard}>
+					<button type="button" className="List-add-button">
 						+ Add Random Card
           </button>
 				</div>
